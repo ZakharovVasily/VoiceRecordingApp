@@ -27,18 +27,28 @@ namespace VoiceRecordingApp
         {
             InitializeComponent();
 
-            DataContext = new AppViewModel();
+            DataContext = _appViewModel = new AppViewModel();
+
+            FinishButton.Visibility = Visibility.Hidden;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             _appViewModel.StartRecord();
+
+            StartButton.Visibility = Visibility.Hidden;
+            FinishButton.Visibility = Visibility.Visible;
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             _appViewModel.StopRecording();
-            MessageBox.Show("Запись окончена.");
+            MessageBox.Show("Запись окончена. Файл сохранен под названием : audio" 
+                            + _appViewModel.FileNameCollection.Count.ToString() + ".wav");
+            _appViewModel.UpdateFileNameCollection();
+
+            StartButton.Visibility = Visibility.Visible;
+            FinishButton.Visibility = Visibility.Hidden;
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)

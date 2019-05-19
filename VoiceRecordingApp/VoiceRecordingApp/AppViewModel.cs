@@ -26,8 +26,6 @@ namespace VoiceRecordingApp
         //Класс для записи в файл
         private WaveFileWriter _writer;
 
-        private int _count;
-
         //Имя файла для записи
         private string outputFilename;
 
@@ -52,25 +50,29 @@ namespace VoiceRecordingApp
             {
                 _fileNameCollection = new ObservableCollection<Audio>();
 
-                var files = Directory.GetFiles(@"Audio", "*.wav");
-                var filesname = Directory.GetFiles(@"Audio", "*.wav").ToList<string>();
+                UpdateFileNameCollection();
+            }
+        }
 
-                foreach (var t in filesname)
-                {
-                    var audio = new Audio();
+        public void UpdateFileNameCollection()
+        {
+            _fileNameCollection.Clear();
 
-                    audio.Path = t;
+            var filesname = Directory.GetFiles(@"Audio", "*.wav").ToList<string>();
 
-                    _fileNameCollection.Add(audio);
-                }
+            foreach (var t in filesname)
+            {
+                var audio = new Audio();
+
+                audio.Path = t;
+                
+                _fileNameCollection.Add(audio);
             }
         }
 
         public AppViewModel()
         {
             FileNameCollection = new ObservableCollection<Audio>();
-
-            _count = 0;
         }
 
         void WaveIn_DataAvailable(object sender, WaveInEventArgs e)
@@ -80,10 +82,9 @@ namespace VoiceRecordingApp
 
         public void StartRecord()
         {
-            MessageBox.Show("Start Recording");
             _waveIn = new WaveIn();
 
-            outputFilename = "Audio/audio" + _count.ToString() + ".wav";
+            outputFilename = "Audio/audio" + FileNameCollection.Count + ".wav";
 
             //Дефолтное устройство для записи (если оно имеется)
             _waveIn.DeviceNumber = 0;
@@ -101,8 +102,6 @@ namespace VoiceRecordingApp
             _writer = new WaveFileWriter(outputFilename, _waveIn.WaveFormat);
 
             _waveIn.StartRecording();
-
-            _count++;
         }
 
         private void WaveIn_RecordingStopped(object sender, EventArgs e)
@@ -129,7 +128,7 @@ namespace VoiceRecordingApp
 
         public void PlayAudio()
         {
-            SoundPlayer simpleSound = new SoundPlayer(outputFilename);
+            SoundPlayer simpleSound = new SoundPlayer(SelectedAudio.Path);
             simpleSound.Play();
         }
     }
