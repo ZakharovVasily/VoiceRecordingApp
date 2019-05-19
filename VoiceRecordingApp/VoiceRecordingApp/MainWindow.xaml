@@ -7,6 +7,30 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <ListBox Grid.Column="0" ItemsSource ="{ Binding FileNameCollection }"
+                 SelectedItem="{Binding SelectedAudio}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="5">
+                        <TextBlock Text="{Binding Path=Path}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Button Grid.Column="0" Grid.Row="1" Content="Начать запись" HorizontalAlignment="Left"  
+                VerticalAlignment="Top" Width="93" Click="Button_Click" Margin="10,10,0,0"/>
+        <Button Grid.Column="0" Grid.Row="1" Content="Закончить" HorizontalAlignment="Left" 
+                VerticalAlignment="Top" Width="75" Click="Button_Click_1" Margin="17,35,0,0"/>
+        <Button Grid.Column="0" Grid.Row="1" Content="Воспроизвести" HorizontalAlignment="Left"
+                VerticalAlignment="Top" Width="93" Click="Button_Click_2" Margin="126,10,0,0"/>
     </Grid>
 </Window>
